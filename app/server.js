@@ -1,27 +1,27 @@
-let express = require('express');
-let path = require('path');
-let fs = require('fs');
-let MongoClient = require('mongodb').MongoClient;
-let bodyParser = require('body-parser');
+import express from 'express';
+import { join } from 'path';
+import { readFileSync } from 'fs';
+import { MongoClient } from 'mongodb';
+import { urlencoded, json } from 'body-parser';
 let app = express();
 
-app.use(bodyParser.urlencoded({
+app.use(urlencoded({
   extended: true
 }));
-app.use(bodyParser.json());
+app.use(json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(join(__dirname, "index.html"));
   });
 
 app.get('/profile-picture', function (req, res) {
-  let img = fs.readFileSync(path.join(__dirname, "images/profile-1.jpg"));
+  let img = readFileSync(join(__dirname, "images/profile-1.jpg"));
   res.writeHead(200, {'Content-Type': 'image/jpg' });
   res.end(img, 'binary');
 });
 
 // use when starting application locally
-let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
+let mongoUrlLocal = "mongodb://admin:password@mongodb";
 
 // use when starting application as docker container
 let mongoUrlDocker = "mongodb://admin:password@mongodb";
